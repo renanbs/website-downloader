@@ -1,11 +1,10 @@
 import argparse
 import os
-from urllib import parse
 import requests
-from pathlib import Path
 from bs4 import BeautifulSoup
 
-from website_downloader.utils import is_fb_pixel, is_url
+from website_downloader.services.image import ImageService
+from website_downloader.utils import is_url
 
 
 def init_argparse() -> argparse.ArgumentParser:
@@ -58,50 +57,9 @@ def _open_saved_page(file_path):
     return lines
 
 
-def _extract_images_to_download(page):
-    raw_imgs = page.find_all('img')
-    images = []
-
-    for raw in raw_imgs:
-        if is_fb_pixel(raw.attrs['src']):
-            continue
-
-        if raw.attrs['src'] not in images:
-            images.append(raw.attrs['src'])
-
-    return images
-
-
 def _obtain_url_from_user():
     return input('You can provide a URL to be used as out base path to '
                  'download the files from the website. (n /  url) -> ')
-
-
-def _prepare_images_directory(images, output):
-    for img in images:
-        joined_dir = os.path.join(output, os.path.dirname(img))
-
-        if not os.path.exists(joined_dir):
-            path = Path(joined_dir)
-            path.mkdir(parents=True, exist_ok=True)
-
-
-def _download_images(images, output, url):
-    for img in images:
-        joined_filepath = os.path.join(output, img)
-
-        if not img.startswith('/'):
-            joined_url = os.path.join(url, img)
-        else:
-            joined_url = parse.urljoin(url, img)
-
-        response = requests.get(joined_url)
-
-        if response.status_code == 200:
-            with open(joined_filepath, 'wb') as file:
-                file.write(response.content)
-        else:
-            print(f'Could not download file: {joined_url}')
 
 
 def run() -> None:
@@ -114,16 +72,15 @@ def run() -> None:
     else:
         page = _open_saved_page(args.input)
 
-    soup = BeautifulSoup(page, 'html.parser')
+    parsed_page = BeautifulSoup(page, 'html.parser')
 
     if not args.url:
         url = _obtain_url_from_user()
     else:
         url = args.url
 
-    images = _extract_images_to_download(soup)
-    _prepare_images_directory(images, args.output)
-    _download_images(images, args.output, url=url)
+    image_service = ImageService(args.output, parsed_page, url)
+    image_service.download_images()
 
 
 if __name__ == "__main__":
