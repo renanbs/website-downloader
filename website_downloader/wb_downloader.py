@@ -40,9 +40,13 @@ def _create_output_dir(output):
 
 def download_page(url, output):
     response = requests.get(url)
-    with open(f'{output}/index.html', 'w') as file:
-        file.write(response.text)
-    return response.text
+
+    if response.status_code == 200:
+        with open(f'{output}/index.html', 'w') as file:
+            file.write(response.text)
+        return response.text
+    else:
+        raise ValidationException(f'Could not download main site from {url}')
 
 
 def _open_saved_page(file_path):
@@ -84,12 +88,13 @@ def _prepare_images_directory(images, output):
 
 def _download_images(images, output, url):
     for img in images:
-
         joined_filepath = os.path.join(output, img)
+
         if not img.startswith('/'):
             joined_url = os.path.join(url, img)
         else:
             joined_url = parse.urljoin(url, img)
+
         response = requests.get(joined_url)
 
         if response.status_code == 200:
