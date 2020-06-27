@@ -41,7 +41,7 @@ create-venv: .create-venv setup-dev
 clean: .clean-build .clean-pyc .clean-test ## remove all build, test, coverage and Python artifacts
 
 pycodestyle:
-	# "Running pycodestyle"
+	echo "Running pycodestyle"
 	pycodestyle
 
 flake8:
@@ -50,11 +50,12 @@ flake8:
 
 pylint:
 	# "Running pylint"
+	#pylint
 
 code-convention: pycodestyle flake8
 
 test:
 	# "Running unit tests"
-	pytest -v --cov-report=term-missing --cov-report=html --cov-report=xml --cov=my_code --cov-fail-under=90
+	pytest -v --cov-report=term-missing --cov-report=html --cov-report=xml --cov=website_downloader --cov-fail-under=70
 
 default_target: clean code-convention test

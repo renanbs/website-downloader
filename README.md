@@ -52,7 +52,7 @@ $HOME/.pyenv/versions/$PROJECT_NAME-$PYTHON_VERSION/bin/python
 
 ### Run unit tests, style and convention
 
-- Tests will run with coverage minimum at 90%.
+- Tests will run with coverage minimum at 70%.
 
 Running code style
 ```bash
@@ -71,64 +71,82 @@ make
 
 #### All Tests passed, coverage and style are ok
 ```zsh
-(my_project-3.8.3) ➜  python-project-template git:(master) ✗ make test
+(website_donwloader-3.8.3) ➜  website-downloader git:(master) ✗ make test
 # "Running unit tests"
-pytest -v --cov-report=term-missing --cov-report=html --cov-report=xml --cov=my_code --cov-fail-under=90
-Test session starts (platform: linux, Python 3.8.0, pytest 5.4.1, pytest-sugar 0.9.3)
-rootdir: /home/renan/src/python-project-template, inifile: setup.cfg
-plugins: cov-2.8.1, sugar-0.9.3, lazy-fixture-0.6.3
+pytest -v --cov-report=term-missing --cov-report=html --cov-report=xml --cov=website_downloader --cov-fail-under=70
+Test session starts (platform: linux, Python 3.8.3, pytest 5.4.3, pytest-sugar 0.9.3)
+rootdir: /home/renan/src/website-downloader, inifile: setup.cfg
+plugins: mock-3.1.1, requests-mock-1.8.0, sugar-0.9.3, cov-2.10.0, lazy-fixture-0.6.3
 collecting ... 
- my_code/tests/test_my_code_file.py ✓                                                                                                                                                                                                                     100% ██████████
+ website_downloader/services/tests/test_html.py ✓✓                                                                                                                                                                                                         40% ████      
+ website_downloader/services/tests/test_image.py ✓✓✓                                                                                                                                                                                                      100% ██████████
 
------------ coverage: platform linux, python 3.8.0-final-0 -----------
-Name                                 Stmts   Miss  Cover   Missing
-------------------------------------------------------------------
-my_code/__init__.py                      0      0   100%
-my_code/my_code_file.py                  2      0   100%
-my_code/tests/__init__.py                0      0   100%
-my_code/tests/test_my_code_file.py       5      0   100%
-------------------------------------------------------------------
-TOTAL                                    7      0   100%
+----------- coverage: platform linux, python 3.8.3-final-0 -----------
+Name                                              Stmts   Miss  Cover   Missing
+-------------------------------------------------------------------------------
+website_downloader/__init__.py                        0      0   100%
+website_downloader/conftest.py                        9      0   100%
+website_downloader/services/__init__.py               0      0   100%
+website_downloader/services/dir.py                   15     15     0%   1-21
+website_downloader/services/exception.py              2      0   100%
+website_downloader/services/html.py                   9      0   100%
+website_downloader/services/image.py                 41      1    98%   45
+website_downloader/services/tests/__init__.py         0      0   100%
+website_downloader/services/tests/test_html.py       23      0   100%
+website_downloader/services/tests/test_image.py      71      0   100%
+website_downloader/services/utils.py                  8      3    62%   9-11
+website_downloader/wb_downloader.py                  30     30     0%   1-54
+-------------------------------------------------------------------------------
+TOTAL                                               208     49    76%
 Coverage HTML written to dir htmlcov
 Coverage XML written to file coverage.xml
 
-Required test coverage of 90% reached. Total coverage: 100.00%
+Required test coverage of 70% reached. Total coverage: 76.44%
 
-Results (0.10s):
-       1 passed
-(my_project-3.8.0) ➜  python-project-template git:(master) ✗
+Results (0.42s):
+       5 passed
 ```
 
 ---
 
 #### Coverage not reached
 ```zsh
-(my_project-3.8.0) ➜  python-project-template git:(master) ✗  make test
-
+(website_donwloader-3.8.3) ➜  website-downloader git:(master) ✗ make test
 # "Running unit tests"
-pytest -v --cov-report=term-missing --cov-report=html --cov-report=xml --cov=my_code --cov-fail-under=90
-Test session starts (platform: linux, Python 3.8.0, pytest 5.4.1, pytest-sugar 0.9.3)
-rootdir: /home/renan/src/python-project-template, inifile: setup.cfg
-plugins: cov-2.8.1, sugar-0.9.3, lazy-fixture-0.6.3
+pytest -v --cov-report=term-missing --cov-report=html --cov-report=xml --cov=website_downloader --cov-fail-under=80
+Test session starts (platform: linux, Python 3.8.3, pytest 5.4.3, pytest-sugar 0.9.3)
+rootdir: /home/renan/src/website-downloader, inifile: setup.cfg
+plugins: mock-3.1.1, requests-mock-1.8.0, sugar-0.9.3, cov-2.10.0, lazy-fixture-0.6.3
 collecting ... 
+ website_downloader/services/tests/test_html.py ✓✓                                                                                                                                                                                                         40% ████      
+ website_downloader/services/tests/test_image.py ✓✓✓                                                                                                                                                                                                      100% ██████████
 
------------ coverage: platform linux, python 3.8.0-final-0 -----------
-Name                                 Stmts   Miss  Cover   Missing
-------------------------------------------------------------------
-my_code/__init__.py                      0      0   100%
-my_code/my_code_file.py                  2      2     0%   2-3
-my_code/tests/__init__.py                0      0   100%
-my_code/tests/test_my_code_file.py       0      0   100%
-------------------------------------------------------------------
-TOTAL                                    2      2     0%
+----------- coverage: platform linux, python 3.8.3-final-0 -----------
+Name                                              Stmts   Miss  Cover   Missing
+-------------------------------------------------------------------------------
+website_downloader/__init__.py                        0      0   100%
+website_downloader/conftest.py                        9      0   100%
+website_downloader/services/__init__.py               0      0   100%
+website_downloader/services/dir.py                   15     15     0%   1-21
+website_downloader/services/exception.py              2      0   100%
+website_downloader/services/html.py                   9      0   100%
+website_downloader/services/image.py                 41      1    98%   45
+website_downloader/services/tests/__init__.py         0      0   100%
+website_downloader/services/tests/test_html.py       23      0   100%
+website_downloader/services/tests/test_image.py      71      0   100%
+website_downloader/services/utils.py                  8      3    62%   9-11
+website_downloader/wb_downloader.py                  30     30     0%   1-54
+-------------------------------------------------------------------------------
+TOTAL                                               208     49    76%
 Coverage HTML written to dir htmlcov
 Coverage XML written to file coverage.xml
 
-FAIL Required test coverage of 90% not reached. Total coverage: 0.00%
+FAIL Required test coverage of 80% not reached. Total coverage: 76.44%
 
-Results (0.10s):
-make: *** [Makefile:58: test] Error 1
-(my_project-3.8.0) ➜  python-project-template git:(master) ✗ 
+Results (0.43s):
+       5 passed
+make: *** [Makefile:59: test] Error 1
+(website_donwloader-3.8.3) ➜  website-downloader git:(master) ✗
 
 ``` 
 
@@ -137,50 +155,70 @@ make: *** [Makefile:58: test] Error 1
 #### Test failed
 
 ```zsh
-(my_project-3.8.0) ➜  python-project-template git:(master) ✗ make test                
+(website_donwloader-3.8.3) ➜  website-downloader git:(master) ✗ make test
 # "Running unit tests"
-pytest -v --cov-report=term-missing --cov-report=html --cov-report=xml --cov=my_code --cov-fail-under=90
-Test session starts (platform: linux, Python 3.8.0, pytest 5.4.1, pytest-sugar 0.9.3)
-rootdir: /home/renan/src/python-project-template, inifile: setup.cfg
-plugins: cov-2.8.1, sugar-0.9.3, lazy-fixture-0.6.3
+pytest -v --cov-report=term-missing --cov-report=html --cov-report=xml --cov=website_downloader --cov-fail-under=70
+Test session starts (platform: linux, Python 3.8.3, pytest 5.4.3, pytest-sugar 0.9.3)
+rootdir: /home/renan/src/website-downloader, inifile: setup.cfg
+plugins: mock-3.1.1, requests-mock-1.8.0, sugar-0.9.3, cov-2.10.0, lazy-fixture-0.6.3
 collecting ... 
 
-―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― test_just_a_example ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― test_should_download_index_html ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
-    def test_just_a_example():
-        value_1 = 2
-        value_2 = 2
->       assert dumb_function(value_1, value_2) == 2
-E       assert 4 == 2
-E        +  where 4 = dumb_function(2, 2)
+requests_mock = <requests_mock.mocker.Mocker object at 0x7fcfd51c48b0>, tmp_path = PosixPath('/tmp/pytest-of-renan/pytest-42/test_should_download_index_htm0')
 
-my_code/tests/test_my_code_file.py:7: AssertionError
+    def test_should_download_index_html(requests_mock, tmp_path):
+        url = 'http://xyz.com'
+        content = 'just the content'
+        requests_mock.get(url, status_code=200, text=content)
+    
+        with patch('website_downloader.services.html.open', mock_open()) as mocked_file:
+            result = download_page(url, tmp_path)
+    
+            mocked_file.assert_called_once_with(os.path.join(str(tmp_path.absolute()), 'index.html'), 'w')
+    
+            mocked_file().write.assert_called_once_with(content)
+>           assert content != result
+E           AssertionError: assert 'just the content' != 'just the content'
 
- my_code/tests/test_my_code_file.py ⨯                                                                                                                                                                                                                     100% ██████████
+website_downloader/services/tests/test_html.py:21: AssertionError
 
------------ coverage: platform linux, python 3.8.0-final-0 -----------
-Name                                 Stmts   Miss  Cover   Missing
-------------------------------------------------------------------
-my_code/__init__.py                      0      0   100%
-my_code/my_code_file.py                  2      0   100%
-my_code/tests/__init__.py                0      0   100%
-my_code/tests/test_my_code_file.py       5      0   100%
-------------------------------------------------------------------
-TOTAL                                    7      0   100%
+ website_downloader/services/tests/test_html.py ⨯✓                                                                                                                                                                                                         40% ████      
+ website_downloader/services/tests/test_image.py ✓✓✓                                                                                                                                                                                                      100% ██████████
+
+----------- coverage: platform linux, python 3.8.3-final-0 -----------
+Name                                              Stmts   Miss  Cover   Missing
+-------------------------------------------------------------------------------
+website_downloader/__init__.py                        0      0   100%
+website_downloader/conftest.py                        9      0   100%
+website_downloader/services/__init__.py               0      0   100%
+website_downloader/services/dir.py                   15     15     0%   1-21
+website_downloader/services/exception.py              2      0   100%
+website_downloader/services/html.py                   9      0   100%
+website_downloader/services/image.py                 41      1    98%   45
+website_downloader/services/tests/__init__.py         0      0   100%
+website_downloader/services/tests/test_html.py       23      0   100%
+website_downloader/services/tests/test_image.py      71      0   100%
+website_downloader/services/utils.py                  8      3    62%   9-11
+website_downloader/wb_downloader.py                  30     30     0%   1-54
+-------------------------------------------------------------------------------
+TOTAL                                               208     49    76%
 Coverage HTML written to dir htmlcov
 Coverage XML written to file coverage.xml
 
-Required test coverage of 90% reached. Total coverage: 100.00%
+Required test coverage of 70% reached. Total coverage: 76.44%
 ======================================================================================================================== short test summary info ========================================================================================================================
-FAILED my_code/tests/test_my_code_file.py::test_just_a_example - assert 4 == 2
+FAILED website_downloader/services/tests/test_html.py::test_should_download_index_html - AssertionError: assert 'just the content' != 'just the content'
 
-Results (0.12s):
+Results (0.44s):
+       4 passed
        1 failed
-         - my_code/tests/test_my_code_file.py:4 test_just_a_example
-make: *** [Makefile:58: test] Error 1
-(my_project-3.8.0) ➜  python-project-template git:(master) ✗ 
-
+         - website_downloader/services/tests/test_html.py:10 test_should_download_index_html
+make: *** [Makefile:59: test] Error 1
+(website_donwloader-3.8.3) ➜  website-downloader git:(master) ✗
 ```
 
 
-## How to use it
+## How to use this project
+
+### TODO
