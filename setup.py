@@ -19,6 +19,7 @@ setup(name='website-downloader',
               'requests-mock>=1.8.0',
               'pytest-mock>=3.1.1',
               'pytest-lazy-fixture>=0.6.3',
+              'flake8>=3.8.3',
           ],
       }
       )

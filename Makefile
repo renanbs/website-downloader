@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := default_target
 
 PROJECT_NAME := website_donwloader
-PYTHON_VERSION := 3.8.2
+PYTHON_VERSION := 3.8.3
 VENV_NAME := $(PROJECT_NAME)-$(PYTHON_VERSION)
 
 setup-dev:

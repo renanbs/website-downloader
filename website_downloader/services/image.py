@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from website_downloader.utils import is_fb_pixel
+from website_downloader.services.utils import is_fb_pixel
 
 import os
 from urllib import parse
