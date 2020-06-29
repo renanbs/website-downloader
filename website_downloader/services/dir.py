@@ -1,15 +1,8 @@
 import os
+from urllib import parse
+from pathlib import Path
 
 from website_downloader.services.exception import ValidationException
-
-
-def create_output_dir(output):
-    if os.path.isdir(output):
-        raise ValidationException('output directory already exists')
-    try:
-        os.mkdir(output)
-    except OSError as e:
-        print(f'Creation of the directory {str(e.strerror)} failed')
 
 
 def open_saved_page(file_path):
@@ -19,3 +12,33 @@ def open_saved_page(file_path):
     with open(f'{file_path}/index.html', 'r') as fh:
         lines = fh.read()
     return lines
+
+
+class DirectoryService:
+    def __init__(self, output_dir: str):
+        self.output_dir = output_dir
+
+    def create_output_dir(self):
+        if os.path.isdir(self.output_dir):
+            raise ValidationException('output directory already exists')
+        try:
+            os.mkdir(self.output_dir)
+        except OSError as e:
+            print(f'Creation of the directory {str(e.strerror)} failed')
+
+    @staticmethod
+    def remove_root(dirname):
+        if dirname.startswith('/'):
+            return dirname[1:len(dirname)]
+        return dirname
+
+    def create_directory_structure(self, items):
+        for item in items:
+            dirname = os.path.dirname(parse.urlsplit(item).path)
+            dirname = self.remove_root(dirname)
+
+            joined_dir = os.path.join(self.output_dir, dirname)
+
+            if not os.path.exists(joined_dir):
+                path = Path(joined_dir)
+                path.mkdir(parents=True, exist_ok=True)

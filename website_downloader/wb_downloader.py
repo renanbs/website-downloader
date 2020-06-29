@@ -1,9 +1,10 @@
 import argparse
 from bs4 import BeautifulSoup
 
-from website_downloader.services.dir import create_output_dir, open_saved_page
+from website_downloader.services.dir import open_saved_page, DirectoryService
 from website_downloader.services.html import download_page
 from website_downloader.services.image import ImageService
+from website_downloader.services.scripts import ScriptService
 from website_downloader.services.utils import is_url
 
 
@@ -33,8 +34,10 @@ def run() -> None:
     parser = init_argparse()
     args = parser.parse_args()
 
+    dir_service = DirectoryService(args.output)
+
     if is_url(args.input):
-        create_output_dir(args.output)
+        dir_service.create_output_dir()
         page = download_page(args.url, args.output)
     else:
         page = open_saved_page(args.input)
@@ -46,7 +49,10 @@ def run() -> None:
     else:
         url = args.url
 
-    image_service = ImageService(args.output, parsed_page, url)
+    scripts_service = ScriptService(dir_service, parsed_page, url)
+    scripts_service.download_scripts()
+
+    image_service = ImageService(dir_service, parsed_page, url)
     image_service.download_images()
 
 

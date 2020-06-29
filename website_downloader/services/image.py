@@ -1,16 +1,16 @@
 from bs4 import BeautifulSoup
 
+from website_downloader.services.dir import DirectoryService
 from website_downloader.services.utils import is_fb_pixel
 
 import os
 from urllib import parse
 import requests
-from pathlib import Path
 
 
 class ImageService:
-    def __init__(self, output_dir: str, page: BeautifulSoup, url: str = None):
-        self.output_dir = output_dir
+    def __init__(self, dir_service: DirectoryService, page: BeautifulSoup, url: str = None):
+        self.dir_service = dir_service
         self.page = page
         self.url = url
 
@@ -27,17 +27,9 @@ class ImageService:
 
         return images
 
-    def _create_images_directory(self, images):
-        for img in images:
-            joined_dir = os.path.join(self.output_dir, os.path.dirname(img))
-
-            if not os.path.exists(joined_dir):
-                path = Path(joined_dir)
-                path.mkdir(parents=True, exist_ok=True)
-
     def _download_images(self, images):
         for img in images:
-            joined_filepath = os.path.join(self.output_dir, img)
+            joined_filepath = os.path.join(self.dir_service.output_dir, img)
 
             if not img.startswith('/'):
                 joined_url = os.path.join(self.url, img)
@@ -54,5 +46,5 @@ class ImageService:
 
     def download_images(self):
         images = self._extract_images_from_page()
-        self._create_images_directory(images)
+        self.dir_service.create_directory_structure(images)
         self._download_images(images)

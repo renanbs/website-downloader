@@ -53,12 +53,12 @@ def image3():
 
 def test_should_get_image_list(image_service, page1, image_list_page_1):
     image_service.page = page1
-    image_service._create_images_directory = Mock()
+    image_service.dir_service.create_directory_structure = Mock()
     image_service._download_images = Mock()
 
     image_service.download_images()
 
-    image_service._create_images_directory.assert_called_with(image_list_page_1)
+    image_service.dir_service.create_directory_structure.assert_called_with(image_list_page_1)
 
 
 def test_should_download_images(image_service, page1, image_list_page_1, requests_mock, image1, image2, image3):
@@ -75,15 +75,15 @@ def test_should_download_images(image_service, page1, image_list_page_1, request
 
     image_service.download_images()
 
-    image_path = os.path.join(image_service.output_dir, image_list_page_1[0])
+    image_path = os.path.join(image_service.dir_service.output_dir, image_list_page_1[0])
     saved_image = file_loader(image_path, True)
     assert saved_image == image1
 
-    image_path = os.path.join(image_service.output_dir, image_list_page_1[1])
+    image_path = os.path.join(image_service.dir_service.output_dir, image_list_page_1[1])
     saved_image = file_loader(image_path, True)
     assert saved_image == image2
 
-    image_path = os.path.join(image_service.output_dir, image_list_page_1[2])
+    image_path = os.path.join(image_service.dir_service.output_dir, image_list_page_1[2])
     saved_image = file_loader(image_path, True)
     assert saved_image == image3
 
@@ -105,8 +105,8 @@ def test_should_not_download_some_images(image_service, page1, image_list_page_1
 
     mocked_print.assert_called_with('Could not download file: http://my-url.com/mkt/images/image1.png')
 
-    assert not os.path.exists(os.path.join(image_service.output_dir, image_list_page_1[0]))
+    assert not os.path.exists(os.path.join(image_service.dir_service.output_dir, image_list_page_1[0]))
 
-    assert file_loader(os.path.join(image_service.output_dir, image_list_page_1[1]), True) == image2
+    assert file_loader(os.path.join(image_service.dir_service.output_dir, image_list_page_1[1]), True) == image2
 
-    assert file_loader(os.path.join(image_service.output_dir, image_list_page_1[2]), True) == image3
+    assert file_loader(os.path.join(image_service.dir_service.output_dir, image_list_page_1[2]), True) == image3
