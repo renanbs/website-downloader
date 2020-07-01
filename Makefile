@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := default_target
 
-PROJECT_NAME := website_donwloader
+PROJECT_NAME := website_downloader
 PYTHON_VERSION := 3.8.3
 VENV_NAME := $(PROJECT_NAME)-$(PYTHON_VERSION)
 

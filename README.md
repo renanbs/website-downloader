@@ -71,7 +71,7 @@ make
 
 #### All Tests passed, coverage and style are ok
 ```zsh
-(website_donwloader-3.8.3) ➜  website-downloader git:(master) ✗ make test
+(website_downloader-3.8.3) ➜  website-downloader git:(master) ✗ make test
 # "Running unit tests"
 pytest -v --cov-report=term-missing --cov-report=html --cov-report=xml --cov=website_downloader --cov-fail-under=70
 Test session starts (platform: linux, Python 3.8.3, pytest 5.4.3, pytest-sugar 0.9.3)
@@ -111,7 +111,7 @@ Results (0.42s):
 
 #### Coverage not reached
 ```zsh
-(website_donwloader-3.8.3) ➜  website-downloader git:(master) ✗ make test
+(website_downloader-3.8.3) ➜  website-downloader git:(master) ✗ make test
 # "Running unit tests"
 pytest -v --cov-report=term-missing --cov-report=html --cov-report=xml --cov=website_downloader --cov-fail-under=80
 Test session starts (platform: linux, Python 3.8.3, pytest 5.4.3, pytest-sugar 0.9.3)
@@ -146,7 +146,7 @@ FAIL Required test coverage of 80% not reached. Total coverage: 76.44%
 Results (0.43s):
        5 passed
 make: *** [Makefile:59: test] Error 1
-(website_donwloader-3.8.3) ➜  website-downloader git:(master) ✗
+(website_downloader-3.8.3) ➜  website-downloader git:(master) ✗
 
 ``` 
 
@@ -155,7 +155,7 @@ make: *** [Makefile:59: test] Error 1
 #### Test failed
 
 ```zsh
-(website_donwloader-3.8.3) ➜  website-downloader git:(master) ✗ make test
+(website_downloader-3.8.3) ➜  website-downloader git:(master) ✗ make test
 # "Running unit tests"
 pytest -v --cov-report=term-missing --cov-report=html --cov-report=xml --cov=website_downloader --cov-fail-under=70
 Test session starts (platform: linux, Python 3.8.3, pytest 5.4.3, pytest-sugar 0.9.3)
@@ -215,7 +215,7 @@ Results (0.44s):
        1 failed
          - website_downloader/services/tests/test_html.py:10 test_should_download_index_html
 make: *** [Makefile:59: test] Error 1
-(website_donwloader-3.8.3) ➜  website-downloader git:(master) ✗
+(website_downloader-3.8.3) ➜  website-downloader git:(master) ✗
 ```
 
 
