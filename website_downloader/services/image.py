@@ -3,8 +3,6 @@ from bs4 import BeautifulSoup
 from website_downloader.services.dir import DirectoryService
 from website_downloader.services.utils import is_fb_pixel
 
-import os
-from urllib import parse
 import requests
 
 
@@ -29,12 +27,7 @@ class ImageService:
 
     def _download_images(self, images):
         for img in images:
-            joined_filepath = os.path.join(self.dir_service.output_dir, img)
-
-            if not img.startswith('/'):
-                joined_url = os.path.join(self.url, img)
-            else:
-                joined_url = parse.urljoin(self.url, img)
+            joined_filepath, joined_url = self.dir_service.obtain_joined_paths(img, self.url)
 
             response = requests.get(joined_url)
 

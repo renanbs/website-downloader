@@ -42,3 +42,15 @@ class DirectoryService:
             if not os.path.exists(joined_dir):
                 path = Path(joined_dir)
                 path.mkdir(parents=True, exist_ok=True)
+
+    def obtain_joined_paths(self, image, base_url):
+        url = parse.urlsplit(image).geturl()
+
+        filepath = os.path.join(self.output_dir, self.remove_root(parse.urlsplit(image).path))
+        joined_url = url
+
+        if not url.startswith('http'):
+            joined_url = parse.urljoin(base_url, url)
+            filepath = os.path.join(self.output_dir, self.remove_root(url))
+
+        return filepath, joined_url
