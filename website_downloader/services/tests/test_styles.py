@@ -43,9 +43,9 @@ def style3():
 def test_should_get_styles_list(styles_service, page, style_list):
     styles_service.page = page
     styles_service.dir_service.create_directory_structure = Mock()
-    styles_service._download_styles = Mock()
+    styles_service._download = Mock()
 
-    styles_service.download_styles()
+    styles_service.download()
 
     styles_service.dir_service.create_directory_structure.assert_called_with(style_list)
 
@@ -54,7 +54,7 @@ def test_should_get_styles_list(styles_service, page, style_list):
                         (pytest.lazy_fixture('page1'), pytest.lazy_fixture('css_list_page_1')),
                         (pytest.lazy_fixture('page2'), pytest.lazy_fixture('css_list_page_2')),))
 def test_should_download_styles(styles_service, page, style_list, requests_mock, style1, style2, style3):
-    styles_service._extract_styles_from_page = Mock(return_value=style_list)
+    styles_service.extract_from_page = Mock(return_value=style_list)
 
     style_path_1, style1_url = styles_service.dir_service.obtain_joined_paths(style_list[0], styles_service.url)
     requests_mock.get(style1_url, status_code=200, content=style1)
@@ -65,7 +65,7 @@ def test_should_download_styles(styles_service, page, style_list, requests_mock,
     style_path_3, style3_url = styles_service.dir_service.obtain_joined_paths(style_list[2], styles_service.url)
     requests_mock.get(style3_url, status_code=200, content=style3)
 
-    styles_service.download_styles()
+    styles_service.download()
 
     saved_style = file_loader(style_path_1, True)
     assert saved_style == style1
@@ -78,7 +78,7 @@ def test_should_download_styles(styles_service, page, style_list, requests_mock,
 
 
 def test_should_not_download_some_styles(styles_service, page1, css_list_page_1, requests_mock, style2, style3):
-    styles_service._extract_styles_from_page = Mock(return_value=css_list_page_1)
+    styles_service.extract_from_page = Mock(return_value=css_list_page_1)
 
     style1_url = os.path.join(styles_service.url, css_list_page_1[0])
     requests_mock.get(style1_url, status_code=400)
@@ -89,8 +89,8 @@ def test_should_not_download_some_styles(styles_service, page1, css_list_page_1,
     style3_url = os.path.join(styles_service.url, css_list_page_1[2])
     requests_mock.get(style3_url, status_code=200, content=style3)
 
-    with patch('website_downloader.services.styles.print') as mocked_print:
-        styles_service.download_styles()
+    with patch('website_downloader.services.files.print') as mocked_print:
+        styles_service.download()
 
     mocked_print.assert_called_with('Could not download file: http://my-url.com/mkt/css/font-awesome.min.css')
 

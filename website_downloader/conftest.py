@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 import pytest
 
 from website_downloader.services.dir import DirectoryService
-from website_downloader.services.image import ImageService
+from website_downloader.services.images import ImagesService
 from website_downloader.services.styles import StyleService
 
 
@@ -19,7 +19,7 @@ def dir_service(tmpdir):
 
 @pytest.fixture
 def image_service(dir_service, source_url):
-    return ImageService(dir_service, MagicMock(), source_url)
+    return ImagesService(dir_service, MagicMock(), source_url)
 
 
 @pytest.fixture

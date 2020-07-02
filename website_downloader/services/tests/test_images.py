@@ -42,9 +42,9 @@ def image3():
 def test_should_get_image_list(image_service, page, image_list):
     image_service.page = page
     image_service.dir_service.create_directory_structure = Mock()
-    image_service._download_images = Mock()
+    image_service._download = Mock()
 
-    image_service.download_images()
+    image_service.download()
 
     image_service.dir_service.create_directory_structure.assert_called_with(image_list)
 
@@ -53,7 +53,7 @@ def test_should_get_image_list(image_service, page, image_list):
                         (pytest.lazy_fixture('page1'), pytest.lazy_fixture('image_list_page_1')),
                         (pytest.lazy_fixture('page2'), pytest.lazy_fixture('image_list_page_2')),))
 def test_should_download_images(image_service, page, image_list, requests_mock, image1, image2, image3):
-    image_service._extract_images_from_page = Mock(return_value=image_list)
+    image_service.extract_from_page = Mock(return_value=image_list)
 
     image_path_1, image1_url = image_service.dir_service.obtain_joined_paths(image_list[0], image_service.url)
     requests_mock.get(image1_url, status_code=200, content=image1)
@@ -64,7 +64,7 @@ def test_should_download_images(image_service, page, image_list, requests_mock, 
     image_path_3, image3_url = image_service.dir_service.obtain_joined_paths(image_list[2], image_service.url)
     requests_mock.get(image3_url, status_code=200, content=image3)
 
-    image_service.download_images()
+    image_service.download()
 
     saved_image = file_loader(image_path_1, True)
     assert saved_image == image1
@@ -77,7 +77,7 @@ def test_should_download_images(image_service, page, image_list, requests_mock, 
 
 
 def test_should_not_download_some_images(image_service, page1, image_list_page_1, requests_mock, image2, image3):
-    image_service._extract_images_from_page = Mock(return_value=image_list_page_1)
+    image_service.extract_from_page = Mock(return_value=image_list_page_1)
 
     image1_url = os.path.join(image_service.url, image_list_page_1[0])
     requests_mock.get(image1_url, status_code=400)
@@ -88,8 +88,8 @@ def test_should_not_download_some_images(image_service, page1, image_list_page_1
     image3_url = os.path.join(image_service.url, image_list_page_1[2])
     requests_mock.get(image3_url, status_code=200, content=image3)
 
-    with patch('website_downloader.services.image.print') as mocked_print:
-        image_service.download_images()
+    with patch('website_downloader.services.files.print') as mocked_print:
+        image_service.download()
 
     mocked_print.assert_called_with('Could not download file: http://my-url.com/mkt/images/image1.png')
 
