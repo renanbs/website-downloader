@@ -24,19 +24,6 @@ class StyleService:
 
         return styles
 
-    def _extract_scripts_from_page(self):
-        raw_links = self.page.find_all('script')
-        scripts = []
-
-        for raw in raw_links:
-            if is_google_font(raw.attrs['href']) or is_favicon(raw.attrs['href']):
-                continue
-
-            if raw.attrs['href'] not in scripts:
-                scripts.append(raw.attrs['href'])
-
-        return scripts
-
     def _download_styles(self, styles):
         for style in styles:
             joined_filepath, joined_url = self.dir_service.obtain_joined_paths(style, self.url)
