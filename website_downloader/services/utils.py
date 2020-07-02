@@ -17,6 +17,12 @@ def is_google_font(input_value):
     return False
 
 
+def is_google_tag_manager(input_value):
+    if input_value.startswith('https://www.googletagmanager.com'):
+        return True
+    return False
+
+
 def is_favicon(input_value):
     if 'favicon' in input_value:
         return True
