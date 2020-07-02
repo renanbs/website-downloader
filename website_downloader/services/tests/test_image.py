@@ -2,31 +2,8 @@ import os
 from unittest.mock import Mock, patch
 
 import pytest
-from bs4 import BeautifulSoup
 
-
-def file_loader(filename, binary=False):
-    """Loads data from file"""
-    read_option = 'r'
-    if binary:
-        read_option = 'rb'
-
-    with open(filename, read_option) as f:
-        data = f.read()
-
-    return data
-
-
-@pytest.fixture
-def page1():
-    file_loaded = file_loader(os.path.join(os.path.dirname(__file__), 'resources', 'index1.html'))
-    return BeautifulSoup(file_loaded, 'html.parser')
-
-
-@pytest.fixture
-def page2():
-    file_loaded = file_loader(os.path.join(os.path.dirname(__file__), 'resources', 'index2.html'))
-    return BeautifulSoup(file_loaded, 'html.parser')
+from website_downloader.services.utils import file_loader
 
 
 @pytest.fixture

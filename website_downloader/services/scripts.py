@@ -1,6 +1,3 @@
-import os
-from urllib import parse
-
 import requests
 from bs4 import BeautifulSoup
 
@@ -29,16 +26,7 @@ class ScriptService:
 
     def _download_scripts(self, scripts):
         for script in scripts:
-            joined_url = parse.urlsplit(script).geturl()
-            if not joined_url.startswith('http'):
-                joined_filepath = os.path.join(self.dir_service.output_dir, script)
-                if not script.startswith('/'):
-                    joined_url = os.path.join(self.url, script)
-                else:
-                    joined_url = parse.urljoin(self.url, script)
-            else:
-                filepath = self.dir_service.remove_root(parse.urlsplit(script).path)
-                joined_filepath = os.path.join(self.dir_service.output_dir, filepath)
+            joined_filepath, joined_url = self.dir_service.obtain_joined_paths(script, self.url)
 
             response = requests.get(joined_url)
 

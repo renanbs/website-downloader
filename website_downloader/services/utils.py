@@ -21,3 +21,15 @@ def is_favicon(input_value):
     if 'favicon' in input_value:
         return True
     return False
+
+
+def file_loader(filename, binary=False):
+    """Loads data from file"""
+    read_option = 'r'
+    if binary:
+        read_option = 'rb'
+
+    with open(filename, read_option) as f:
+        data = f.read()
+
+    return data
