@@ -4,7 +4,7 @@ import pytest
 
 from website_downloader.services.dir import DirectoryService
 from website_downloader.services.image import ImageService
-from website_downloader.services.scripts import ScriptService
+from website_downloader.services.styles import StyleService
 
 
 @pytest.fixture
@@ -23,5 +23,5 @@ def image_service(dir_service, source_url):
 
 
 @pytest.fixture
-def scripts_service(dir_service, source_url):
-    return ScriptService(dir_service, MagicMock(), source_url)
+def styles_service(dir_service, source_url):
+    return StyleService(dir_service, MagicMock(), source_url)
