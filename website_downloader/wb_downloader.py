@@ -4,8 +4,8 @@ from bs4 import BeautifulSoup
 from website_downloader.services.dir import open_saved_page, DirectoryService
 from website_downloader.services.html import download_page
 from website_downloader.services.images import ImagesService
-from website_downloader.services.scripts import ScriptService
-from website_downloader.services.styles import StyleService
+from website_downloader.services.scripts import ScriptsService
+from website_downloader.services.styles import StylesService
 from website_downloader.services.utils import is_url
 
 
@@ -50,10 +50,10 @@ def run() -> None:
     else:
         url = args.url
 
-    scripts_service = ScriptService(dir_service, parsed_page, url)
+    scripts_service = ScriptsService(dir_service, parsed_page, url)
     scripts_service.download()
 
-    styles_service = StyleService(dir_service, parsed_page, url)
+    styles_service = StylesService(dir_service, parsed_page, url)
     styles_service.download()
 
     image_service = ImagesService(dir_service, parsed_page, url)

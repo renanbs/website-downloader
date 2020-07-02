@@ -2,7 +2,7 @@ from website_downloader.services.files import FilesService
 from website_downloader.services.utils import is_google_tag_manager
 
 
-class ScriptService(FilesService):
+class ScriptsService(FilesService):
     def extract_from_page(self):
         raw_links = self.page.find_all('script')
         scripts = []

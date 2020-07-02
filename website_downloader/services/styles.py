@@ -2,7 +2,7 @@ from website_downloader.services.files import FilesService
 from website_downloader.services.utils import is_google_font, is_favicon
 
 
-class StyleService(FilesService):
+class StylesService(FilesService):
     def extract_from_page(self):
         raw_links = self.page.find_all('link')
         styles = []
