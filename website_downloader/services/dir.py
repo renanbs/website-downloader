@@ -50,7 +50,7 @@ class DirectoryService:
         joined_url = url
 
         if not url.startswith('http'):
-            joined_url = parse.urljoin(base_url, url)
+            joined_url = os.path.join(base_url, url)
             filepath = os.path.join(self.output_dir, self.remove_root(url))
 
         return filepath, joined_url

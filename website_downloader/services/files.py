@@ -18,7 +18,8 @@ class FilesService(ABC):
 
     def _download(self, files):
         for the_file in files:
-            joined_filepath, joined_url = self.dir_service.obtain_joined_paths(the_file, self.url)
+            joined_filepath, joined_url = self.dir_service.obtain_joined_paths(self.dir_service.remove_root(the_file),
+                                                                               self.url)
 
             response = requests.get(joined_url)
 

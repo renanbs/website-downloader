@@ -26,11 +26,6 @@ def init_argparse() -> argparse.ArgumentParser:
     return parser
 
 
-def _obtain_url_from_user():
-    return input('You can provide a URL to be used as out base path to '
-                 'download the files from the website. (n /  url) -> ')
-
-
 def run() -> None:
     parser = init_argparse()
     args = parser.parse_args()
@@ -39,16 +34,15 @@ def run() -> None:
 
     if is_url(args.input):
         dir_service.create_output_dir()
-        page = download_page(args.url, args.output)
+        page = download_page(args.input, args.output)
     else:
         page = open_saved_page(args.input)
 
     parsed_page = BeautifulSoup(page, 'html.parser')
 
+    url = args.url
     if not args.url:
-        url = _obtain_url_from_user()
-    else:
-        url = args.url
+        url = args.input
 
     scripts_service = ScriptsService(dir_service, parsed_page, url)
     scripts_service.download()
