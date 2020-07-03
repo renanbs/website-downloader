@@ -21,7 +21,10 @@ class FilesService(ABC):
             joined_filepath, joined_url = self.dir_service.obtain_joined_paths(self.dir_service.remove_root(the_file),
                                                                                self.url)
 
-            response = requests.get(joined_url)
+            response = requests.get(joined_url,
+                                    headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
+                                                           'AppleWebKit/537.36 (KHTML, like Gecko) '
+                                                           'Chrome/80.0.3987.163 Safari/537.36'})
 
             if response.status_code == 200:
                 with open(joined_filepath, 'wb') as file:
