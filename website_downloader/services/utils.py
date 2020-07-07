@@ -12,13 +12,13 @@ def is_url(input_value):
 
 
 def is_google_font(input_value):
-    if input_value.startswith('https://fonts.googleapis.com'):
+    if 'fonts.googleapis.com' in input_value:
         return True
     return False
 
 
 def is_google_tag_manager(input_value):
-    if input_value.startswith('https://www.googletagmanager.com'):
+    if 'googletagmanager.com' in input_value:
         return True
     return False
 

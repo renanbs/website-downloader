@@ -32,8 +32,20 @@ class DirectoryService:
             return dirname[1:len(dirname)]
         return dirname
 
+    @staticmethod
+    def fix_url(url):
+        # TODO: Find a better place to put this method
+        if url.startswith('http:///'):
+            return url.replace('http:///', 'http://')
+        if url.startswith('https:///'):
+            return url.replace('https:///', 'https://')
+        return url
+
     def create_directory_structure(self, items):
+        # TODO: return the path created to use in the download method
         for item in items:
+            # TODO: Do this line above only once
+            item = self.fix_url(item)
             dirname = os.path.dirname(parse.urlsplit(item).path)
             dirname = self.remove_root(dirname)
 
@@ -43,14 +55,12 @@ class DirectoryService:
                 path = Path(joined_dir)
                 path.mkdir(parents=True, exist_ok=True)
 
-    def obtain_joined_paths(self, image, base_url):
-        url = parse.urlsplit(image).geturl()
+    def obtain_joined_paths(self, item_url):
+        item_url = self.fix_url(item_url)
+        filepath = os.path.join(self.output_dir, self.remove_root(parse.urlsplit(item_url).path))
 
-        filepath = os.path.join(self.output_dir, self.remove_root(parse.urlsplit(image).path))
-        joined_url = url
-
+        url = parse.urlsplit(item_url).geturl()
         if not url.startswith('http'):
-            joined_url = os.path.join(base_url, url)
             filepath = os.path.join(self.output_dir, self.remove_root(url))
 
-        return filepath, joined_url
+        return filepath

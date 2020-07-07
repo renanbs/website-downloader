@@ -1,4 +1,6 @@
+import os
 from abc import ABC, abstractmethod
+from urllib import parse
 
 import requests
 from bs4 import BeautifulSoup
@@ -16,11 +18,32 @@ class FilesService(ABC):
     def extract_from_page(self):
         pass
 
+    def obtain_download_url(self, the_file):
+        url = parse.urlsplit(the_file).geturl()
+
+        if url.startswith('http'):
+            return self.dir_service.fix_url(url)
+
+        if the_file.startswith('//'):
+            return parse.urljoin(f'{parse.urlsplit(self.url).scheme}:', the_file[2:len(the_file)])
+
+        return self.dir_service.remove_root(the_file)
+
+    def _obtain_download_url(self, item):
+        url = parse.urlsplit(item).geturl()
+
+        joined_url = self.dir_service.fix_url(url)
+
+        if not url.startswith('http'):
+            joined_url = os.path.join(self.url, url)
+
+        return joined_url
+
     def _download(self, files):
         for the_file in files:
-            joined_filepath, joined_url = self.dir_service.obtain_joined_paths(self.dir_service.remove_root(the_file),
-                                                                               self.url)
+            joined_filepath = self.dir_service.obtain_joined_paths(self.dir_service.remove_root(the_file))
 
+            joined_url = self._obtain_download_url(the_file)
             response = requests.get(joined_url,
                                     headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
                                                            'AppleWebKit/537.36 (KHTML, like Gecko) '

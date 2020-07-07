@@ -8,10 +8,11 @@ class StylesService(FilesService):
         styles = []
 
         for raw in raw_links:
-            if is_google_font(raw.attrs['href']) or is_favicon(raw.attrs['href']):
+            url = self.obtain_download_url(raw.attrs['href'])
+            if is_google_font(url) or is_favicon(url):
                 continue
 
-            if raw.attrs['href'] not in styles:
-                styles.append(raw.attrs['href'])
+            if url not in styles:
+                styles.append(url)
 
         return styles
