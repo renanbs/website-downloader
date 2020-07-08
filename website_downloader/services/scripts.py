@@ -3,17 +3,17 @@ from website_downloader.services.utils import is_google_tag_manager
 
 
 class ScriptsService(FilesService):
-    def extract_from_page(self):
+    def extract_elements_from_page(self):
         raw_links = self.page.find_all('script')
-        scripts = []
 
         for raw in raw_links:
             src = raw.attrs.get('src')
 
-            if not src or is_google_tag_manager(src):
+            if not src:
                 continue
 
-            if src not in scripts:
-                scripts.append(src)
+            if src not in self.raw_elements:
+                self.raw_elements.append(src)
 
-        return scripts
+    def filter_elements(self):
+        return list(filter(lambda elem: not is_google_tag_manager(elem), self.raw_elements))

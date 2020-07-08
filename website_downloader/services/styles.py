@@ -3,16 +3,15 @@ from website_downloader.services.utils import is_google_font, is_favicon
 
 
 class StylesService(FilesService):
-    def extract_from_page(self):
+    def extract_elements_from_page(self):
         raw_links = self.page.find_all('link')
-        styles = []
 
         for raw in raw_links:
             url = self.obtain_download_url(raw.attrs['href'])
-            if is_google_font(url) or is_favicon(url):
-                continue
 
-            if url not in styles:
-                styles.append(url)
+            if url not in self.raw_elements:
+                self.raw_elements.append(url)
 
-        return styles
+    def filter_elements(self):
+        first_filter = list(filter(lambda elem: not is_google_font(elem), self.raw_elements))
+        return list(filter(lambda elem: not is_favicon(elem), first_filter))

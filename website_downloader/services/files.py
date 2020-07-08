@@ -13,9 +13,14 @@ class FilesService(ABC):
         self.dir_service = dir_service
         self.page = page
         self.url = url
+        self.raw_elements = []
 
     @abstractmethod
-    def extract_from_page(self):
+    def extract_elements_from_page(self):
+        pass
+
+    @abstractmethod
+    def filter_elements(self):
         pass
 
     def obtain_download_url(self, the_file):
@@ -28,6 +33,9 @@ class FilesService(ABC):
             return parse.urljoin(f'{parse.urlsplit(self.url).scheme}:', the_file[2:len(the_file)])
 
         return self.dir_service.remove_root(the_file)
+
+    def obtain_output_path(self, the_file):
+        pass
 
     def _obtain_download_url(self, item):
         url = parse.urlsplit(item).geturl()
@@ -56,6 +64,7 @@ class FilesService(ABC):
                 print(f'Could not download file: {joined_url}')
 
     def download(self):
-        files = self.extract_from_page()
-        self.dir_service.create_directory_structure(files)
-        self._download(files)
+        self.extract_elements_from_page()
+        filtered = self.filter_elements()
+        self.dir_service.create_directory_structure(filtered)
+        self._download(filtered)

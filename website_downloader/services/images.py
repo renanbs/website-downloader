@@ -3,7 +3,7 @@ from website_downloader.services.utils import is_fb_pixel
 
 
 class ImagesService(FilesService):
-    def extract_from_page(self):
+    def extract_elements_from_page(self):
         raw_imgs = self.page.find_all('img')
         images = []
 
