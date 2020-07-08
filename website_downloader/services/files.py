@@ -14,6 +14,7 @@ class FilesService(ABC):
         self.page = page
         self.url = url
         self.raw_elements = []
+        self.elements = []
 
     @abstractmethod
     def extract_elements_from_page(self):
@@ -23,7 +24,7 @@ class FilesService(ABC):
     def filter_elements(self):
         pass
 
-    def obtain_download_url(self, the_file):
+    def _obtain_download_url(self, the_file):
         url = parse.urlsplit(the_file).geturl()
 
         if url.startswith('http'):
@@ -32,20 +33,23 @@ class FilesService(ABC):
         if the_file.startswith('//'):
             return parse.urljoin(f'{parse.urlsplit(self.url).scheme}:', the_file[2:len(the_file)])
 
-        return self.dir_service.remove_root(the_file)
+        return os.path.join(parse.urlsplit(self.url).geturl(), self.dir_service.remove_root(url))
 
-    def obtain_output_path(self, the_file):
-        pass
+    def _obtain_output_path(self, the_file):
+        return os.path.join(self.dir_service.output_dir,
+                            self.dir_service.remove_root(parse.urlsplit(the_file).path))
 
-    def _obtain_download_url(self, item):
-        url = parse.urlsplit(item).geturl()
+    def obtain_download_and_output_path(self):
+        output_file = []
+        files_with_download_url = dict()
 
-        joined_url = self.dir_service.fix_url(url)
+        for elem in self.elements:
+            url = self._obtain_download_url(elem)
+            output = self._obtain_output_path(elem)
+            output_file.append(output)
+            files_with_download_url[output] = url
 
-        if not url.startswith('http'):
-            joined_url = os.path.join(self.url, url)
-
-        return joined_url
+        return files_with_download_url, output_file
 
     def _download(self, files):
         for the_file in files:
@@ -65,6 +69,10 @@ class FilesService(ABC):
 
     def download(self):
         self.extract_elements_from_page()
-        filtered = self.filter_elements()
-        self.dir_service.create_directory_structure(filtered)
-        self._download(filtered)
+        self.filter_elements()
+
+        files_with_download_url, output_file = self.obtain_download_and_output_path()
+
+        print(files_with_download_url)
+        # self.dir_service.create_directory_structure(files_with_download_url)
+        # self._download(download_url, output_file)

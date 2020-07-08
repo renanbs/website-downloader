@@ -16,4 +16,4 @@ class ScriptsService(FilesService):
                 self.raw_elements.append(src)
 
     def filter_elements(self):
-        return list(filter(lambda elem: not is_google_tag_manager(elem), self.raw_elements))
+        self.elements = list(filter(lambda elem: not is_google_tag_manager(elem), self.raw_elements))

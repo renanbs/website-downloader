@@ -41,18 +41,19 @@ class DirectoryService:
             return url.replace('https:///', 'https://')
         return url
 
-    def create_directory_structure(self, items):
+    @staticmethod
+    def create_directory_structure(files):
         # TODO: return the path created to use in the download method
-        for item in items:
+        for item in files.items():
             # TODO: Do this line above only once
-            item = self.fix_url(item)
-            dirname = os.path.dirname(parse.urlsplit(item).path)
-            dirname = self.remove_root(dirname)
+            # item = self.fix_url(item)
+            # dirname = os.path.dirname(parse.urlsplit(item).path)
+            # dirname = self.remove_root(dirname)
+            #
+            # joined_dir = os.path.join(self.output_dir, dirname)
 
-            joined_dir = os.path.join(self.output_dir, dirname)
-
-            if not os.path.exists(joined_dir):
-                path = Path(joined_dir)
+            if not os.path.exists(item):
+                path = Path(item)
                 path.mkdir(parents=True, exist_ok=True)
 
     def obtain_joined_paths(self, item_url):
