@@ -1,100 +1,28 @@
-import os
-from unittest.mock import Mock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
-from website_downloader.services.utils import file_loader
+
+@pytest.fixture
+def filtered_image_list():
+    return ['/mkt/images/image1.png', '/mkt/images/image-from-data-src.png',
+            'https://xyz.com/app/Views/public/mkt/images/image2.png', 'mkt/images/image2.png', 'mkt/images/image3.jpg']
 
 
 @pytest.fixture
-def image_list_page_1():
-    return ['/mkt/images/image1.png', 'mkt/images/image2.png', 'mkt/images/image3.jpg']
+def unfiltered_image_list():
+    return ['https://www.facebook.com/tr?id=18885911215512&ev=PageView&noscript=1', '/mkt/images/image1.png',
+            '/mkt/images/image-from-data-src.png', 'https://xyz.com/app/Views/public/mkt/images/image2.png',
+            'mkt/images/image2.png', 'mkt/images/image3.jpg']
 
 
-@pytest.fixture
-def image_list_page_2():
-    return ['https://xyz.com/app/Views/public/mkt/images/image1.png',
-            'https://xyz.com/app/Views/public/mkt/images/image2.png',
-            'https://xyz.com/app/Views/public/mkt/images/image3.jpg']
-
-
-@pytest.fixture
-def image1():
-    filename = os.path.join(os.path.dirname(__file__), 'resources', 'image1.png')
-    return file_loader(filename, True)
-
-
-@pytest.fixture
-def image2():
-    filename = os.path.join(os.path.dirname(__file__), 'resources', 'image2.png')
-    return file_loader(filename, True)
-
-
-@pytest.fixture
-def image3():
-    filename = os.path.join(os.path.dirname(__file__), 'resources', 'image3.jpg')
-    return file_loader(filename, True)
-
-
-@pytest.mark.parametrize('page, image_list', (
-                        (pytest.lazy_fixture('page1'), pytest.lazy_fixture('image_list_page_1')),
-                        (pytest.lazy_fixture('page2'), pytest.lazy_fixture('image_list_page_2')),))
-def test_should_get_image_list(image_service, page, image_list):
-    image_service.page = page
-    image_service.dir_service.create_directory_structure = Mock()
-    image_service._download = Mock()
+def test_should_get_filtered_image_list(image_service, page1, filtered_image_list, unfiltered_image_list):
+    image_service.page = page1
+    image_service.dir_service.create_directory_structure = MagicMock()
+    image_service._download = MagicMock()
+    image_service.obtain_download_and_output_path = MagicMock(return_value=(MagicMock(), MagicMock()))
 
     image_service.download()
 
-    image_service.dir_service.create_directory_structure.assert_called_with(image_list)
-
-
-@pytest.mark.parametrize('page, image_list', (
-                        (pytest.lazy_fixture('page1'), pytest.lazy_fixture('image_list_page_1')),
-                        (pytest.lazy_fixture('page2'), pytest.lazy_fixture('image_list_page_2')),))
-def test_should_download_images(image_service, page, image_list, requests_mock, image1, image2, image3):
-    image_service.extract_from_page = Mock(return_value=image_list)
-
-    image_path_1, image1_url = image_service.dir_service.obtain_joined_paths(image_list[0], image_service.url)
-    requests_mock.get(image1_url, status_code=200, content=image1)
-
-    image_path_2, image2_url = image_service.dir_service.obtain_joined_paths(image_list[1], image_service.url)
-    requests_mock.get(image2_url, status_code=200, content=image2)
-
-    image_path_3, image3_url = image_service.dir_service.obtain_joined_paths(image_list[2], image_service.url)
-    requests_mock.get(image3_url, status_code=200, content=image3)
-
-    image_service.download()
-
-    saved_image = file_loader(image_path_1, True)
-    assert saved_image == image1
-
-    saved_image = file_loader(image_path_2, True)
-    assert saved_image == image2
-
-    saved_image = file_loader(image_path_3, True)
-    assert saved_image == image3
-
-
-def test_should_not_download_some_images(image_service, page1, image_list_page_1, requests_mock, image2, image3):
-    image_service.extract_from_page = Mock(return_value=image_list_page_1)
-
-    image1_url = os.path.join(image_service.url, image_list_page_1[0])
-    requests_mock.get(image1_url, status_code=400)
-
-    image2_url = os.path.join(image_service.url, image_list_page_1[1])
-    requests_mock.get(image2_url, status_code=200, content=image2)
-
-    image3_url = os.path.join(image_service.url, image_list_page_1[2])
-    requests_mock.get(image3_url, status_code=200, content=image3)
-
-    with patch('website_downloader.services.files.print') as mocked_print:
-        image_service.download()
-
-    mocked_print.assert_called_with('Could not download file: http://my-url.com/mkt/images/image1.png')
-
-    assert not os.path.exists(os.path.join(image_service.dir_service.output_dir, image_list_page_1[0]))
-
-    assert file_loader(os.path.join(image_service.dir_service.output_dir, image_list_page_1[1]), True) == image2
-
-    assert file_loader(os.path.join(image_service.dir_service.output_dir, image_list_page_1[2]), True) == image3
+    assert image_service.elements == filtered_image_list
+    assert image_service.raw_elements == unfiltered_image_list

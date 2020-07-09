@@ -47,7 +47,7 @@ def test_should_get_styles_list(styles_service, page, style_list):
 
     styles_service.download()
 
-    styles_service.dir_service.create_directory_structure.assert_called_with(style_list)
+    assert styles_service.elements == style_list
 
 
 @pytest.mark.parametrize('page, style_list', (

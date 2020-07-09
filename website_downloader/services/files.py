@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from website_downloader.services.dir import DirectoryService
+from website_downloader.services.utils import fix_url
 
 
 class FilesService(ABC):
@@ -28,7 +29,7 @@ class FilesService(ABC):
         url = parse.urlsplit(the_file).geturl()
 
         if url.startswith('http'):
-            return self.dir_service.fix_url(url)
+            return fix_url(url)
 
         if the_file.startswith('//'):
             return parse.urljoin(f'{parse.urlsplit(self.url).scheme}:', the_file[2:len(the_file)])

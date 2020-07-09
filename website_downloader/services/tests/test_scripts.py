@@ -1,4 +1,4 @@
-from unittest.mock import Mock
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -15,9 +15,10 @@ def scripts_list_page_1():
 
 def test_should_get_scripts_list(scripts_service, page1, scripts_list_page_1):
     scripts_service.page = page1
-    scripts_service.dir_service.create_directory_structure = Mock()
-    scripts_service._download = Mock()
+    scripts_service.dir_service.create_directory_structure = MagicMock()
+    scripts_service._download = MagicMock()
+    scripts_service.obtain_download_and_output_path = MagicMock(return_value=(MagicMock(), MagicMock()))
 
     scripts_service.download()
 
-    scripts_service.dir_service.create_directory_structure.assert_called_with(scripts_list_page_1)
+    assert scripts_service.elements == scripts_list_page_1
