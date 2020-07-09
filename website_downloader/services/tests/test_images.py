@@ -20,7 +20,6 @@ def test_should_get_filtered_image_list(image_service, page1, filtered_image_lis
     image_service.page = page1
     image_service.dir_service.create_directory_structure = MagicMock()
     image_service._download = MagicMock()
-    image_service.obtain_download_and_output_path = MagicMock(return_value=(MagicMock(), MagicMock()))
 
     image_service.download()
 

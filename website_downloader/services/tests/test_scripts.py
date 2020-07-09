@@ -17,7 +17,6 @@ def test_should_get_scripts_list(scripts_service, page1, scripts_list_page_1):
     scripts_service.page = page1
     scripts_service.dir_service.create_directory_structure = MagicMock()
     scripts_service._download = MagicMock()
-    scripts_service.obtain_download_and_output_path = MagicMock(return_value=(MagicMock(), MagicMock()))
 
     scripts_service.download()
 

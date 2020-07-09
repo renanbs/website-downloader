@@ -54,15 +54,20 @@ def test_should_get_styles_list(styles_service, page, style_list):
                         (pytest.lazy_fixture('page1'), pytest.lazy_fixture('css_list_page_1')),
                         (pytest.lazy_fixture('page2'), pytest.lazy_fixture('css_list_page_2')),))
 def test_should_download_styles(styles_service, page, style_list, requests_mock, style1, style2, style3):
-    styles_service.extract_from_page = Mock(return_value=style_list)
+    styles_service.extract_elements_from_page = Mock(return_value=style_list)
+    styles_service.filter_elements = Mock(return_value=style_list)
 
-    style_path_1, style1_url = styles_service.dir_service.obtain_joined_paths(style_list[0], styles_service.url)
+    style1_url = styles_service._obtain_download_url(style_list[0])
+    style_path_1 = os.path.dirname(styles_service._obtain_output_path(style_list[0]))
     requests_mock.get(style1_url, status_code=200, content=style1)
 
-    style_path_2, style2_url = styles_service.dir_service.obtain_joined_paths(style_list[1], styles_service.url)
+    style2_url = styles_service._obtain_download_url(style_list[1])
+    style_path_2 = os.path.dirname(styles_service._obtain_output_path(style_list[1]))
     requests_mock.get(style2_url, status_code=200, content=style2)
 
-    style_path_3, style3_url = styles_service.dir_service.obtain_joined_paths(style_list[2], styles_service.url)
+    style3_url = styles_service._obtain_download_url(style_list[2])
+    style_path_3 = os.path.dirname(styles_service._obtain_output_path(style_list[2]))
+
     requests_mock.get(style3_url, status_code=200, content=style3)
 
     styles_service.download()
