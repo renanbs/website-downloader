@@ -39,3 +39,11 @@ def file_loader(filename, binary=False):
         data = f.read()
 
     return data
+
+
+def fix_url(url):
+    if url.startswith('http:///'):
+        return url.replace('http:///', 'http://')
+    if url.startswith('https:///'):
+        return url.replace('https:///', 'https://')
+    return url

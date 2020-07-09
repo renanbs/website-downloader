@@ -51,21 +51,19 @@ class FilesService(ABC):
 
         return files_with_download_url, output_file
 
-    def _download(self, files):
-        for the_file in files:
-            joined_filepath = self.dir_service.obtain_joined_paths(self.dir_service.remove_root(the_file))
-
-            joined_url = self._obtain_download_url(the_file)
-            response = requests.get(joined_url,
+    @staticmethod
+    def _download(files):
+        for the_file in files.items():
+            response = requests.get(the_file[1],
                                     headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '
                                                            'AppleWebKit/537.36 (KHTML, like Gecko) '
                                                            'Chrome/80.0.3987.163 Safari/537.36'})
 
             if response.status_code == 200:
-                with open(joined_filepath, 'wb') as file:
+                with open(the_file[0], 'wb') as file:
                     file.write(response.content)
             else:
-                print(f'Could not download file: {joined_url}')
+                print(f'Could not download file: {the_file[1]}')
 
     def download(self):
         self.extract_elements_from_page()
@@ -73,6 +71,5 @@ class FilesService(ABC):
 
         files_with_download_url, output_file = self.obtain_download_and_output_path()
 
-        print(files_with_download_url)
-        # self.dir_service.create_directory_structure(files_with_download_url)
-        # self._download(download_url, output_file)
+        self.dir_service.create_directory_structure(files_with_download_url)
+        self._download(files_with_download_url)
